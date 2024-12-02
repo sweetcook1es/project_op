@@ -1,0 +1,31 @@
+def find_empty_cell(board):
+    #Находит координаты (строка, столбец) пустой клетки (0)
+    for r in range(SIZE):
+        for c in range(SIZE):
+            if board[r][c] == 0:
+                return r, c
+
+def is_valid_move(board, dr, dc):
+    #Проверяет, является ли ход допустимым (не выходит ли за границы поля)
+    r, c = find_empty_cell(board)
+    return 0 <= r + dr < SIZE and 0 <= c + dc < SIZE
+
+def move_tile(board, dr, dc):
+    #Перемещает плитку в указанном направлении
+    r, c = find_empty_cell(board)
+    board[r][c], board[r + dr][c + dc] = board[r + dr][c + dc], board[r][c] # Меняет местами элементы
+
+def is_solved(board):
+    #Проверяет, решено ли игровое поле
+    correct_board = [list(range(i * SIZE + 1, (i + 1) * SIZE + 1)) for i in range(SIZE)] # Правильное расположение
+    correct_board[SIZE - 1][SIZE - 1] = 0  # Пустая клетка внизу справа
+    return board == correct_board # Сравнивает массивы
+
+def get_move():
+    #Получает и проверяет команду пользователя
+    while True:
+        move = input("Введите команду (up, down, left, right) или 'exit': ").strip().lower()
+        if move in ["up", "down", "left", "right", "exit"]:
+            return move
+        else:
+            print("Неверная команда. Попробуйте снова.")
