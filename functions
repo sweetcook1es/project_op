@@ -1,1 +1,16 @@
- 
+import random
+
+# Размер игрового поля (можно изменить, но лучше, чтобы SIZE был нечетным)
+SIZE = 4
+
+def create_board():
+    #Создает начальное состояние игрового поля.  Перемешивает числа от 1 до SIZE*SIZE-1 и 0 (пустая клетка)
+    numbers = list(range(1, SIZE * SIZE)) + [0]
+    random.shuffle(numbers)
+    board = [numbers[i:i + SIZE] for i in range(0, len(numbers), SIZE)] # Создает двумерный массив
+    return board
+
+def print_board(board):
+    #Отображает игровое поле в консоли
+    for row in board:
+        print(' '.join(f'{num:2}' if num != 0 else '  ' for num in row)) # Форматирует вывод 
