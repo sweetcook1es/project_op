@@ -1,0 +1,83 @@
+import random
+
+# Размер игрового поля (можно изменить, но лучше, чтобы SIZE был нечетным)
+SIZE = 4
+
+def create_board():
+    #Создает начальное состояние игрового поля.  Перемешивает числа от 1 до SIZE*SIZE-1 и 0 (пустая клетка)
+    numbers = list(range(1, SIZE * SIZE)) + [0]
+    random.shuffle(numbers)
+    board = [numbers[i:i + SIZE] for i in range(0, len(numbers), SIZE)] # Создает двумерный массив
+    return board
+
+def print_board(board):
+    #Отображает игровое поле в консоли
+    for row in board:
+        print(' '.join(f'{num:2}' if num != 0 else '  ' for num in row)) # Форматирует вывод
+
+def find_empty_cell(board):
+    #Находит координаты (строка, столбец) пустой клетки (0)
+    for r in range(SIZE):
+        for c in range(SIZE):
+            if board[r][c] == 0:
+                return r, c
+
+def is_valid_move(board, dr, dc):
+    #Проверяет, является ли ход допустимым (не выходит ли за границы поля)
+    r, c = find_empty_cell(board)
+    return 0 <= r + dr < SIZE and 0 <= c + dc < SIZE
+
+def move_tile(board, dr, dc):
+    #Перемещает плитку в указанном направлении
+    r, c = find_empty_cell(board)
+    board[r][c], board[r + dr][c + dc] = board[r + dr][c + dc], board[r][c] # Меняет местами элементы
+
+def is_solved(board):
+    #Проверяет, решено ли игровое поле
+    correct_board = [list(range(i * SIZE + 1, (i + 1) * SIZE + 1)) for i in range(SIZE)] # Правильное расположение
+    correct_board[SIZE - 1][SIZE - 1] = 0  # Пустая клетка внизу справа
+    return board == correct_board # Сравнивает массивы
+
+def get_move():
+    #Получает и проверяет команду пользователя
+    while True:
+        move = input("Введите команду (up, down, left, right) или 'exit': ").strip().lower()
+        if move in ["up", "down", "left", "right", "exit"]:
+            return move
+        else:
+            print("Неверная команда. Попробуйте снова.")
+
+def play_game():
+    #Основная функция игрового цикла
+    board = create_board()
+    while True:
+        print_board(board)
+        if is_solved(board):
+            print("Поздравляю! Вы выиграли!")
+            break
+
+        move = get_move()
+        if move == "exit":
+            print("Вы вышли из игры")
+            break
+
+
+        dr, dc = 0, 0
+        if move == "up":
+            dr = -1
+        elif move == "down":
+            dr = 1
+        elif move == "left":
+            dc = -1
+        elif move == "right":
+            dc = 1
+
+        if is_valid_move(board, dr, dc):
+            move_tile(board, dr, dc)
+        else:
+            print("Нельзя сделать этот ход.")
+
+
+if __name__ == "__main__":
+    play_game()
+
