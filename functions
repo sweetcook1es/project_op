@@ -14,3 +14,4 @@ def print_board(board):
     #Отображает игровое поле в консоли
     for row in board:
         print(' '.join(f'{num:2}' if num != 0 else '  ' for num in row)) # Форматирует вывод 
+ 
